@@ -11,7 +11,7 @@
 
         gtag('config', 'UA-82213539-2');
     </script>
-    <title>2 Scheduling Basics 4.0.0-SNAPSHOT</title>
+    <title>2 Scheduling Basics 3.0.1-SNAPSHOT</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
     <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
@@ -81,7 +81,7 @@ function addJsClass() {
                 <div class="project">
                     <h1>2 Scheduling Basics</h1>
 
-                    <p><strong>Version:</strong> 4.0.0-SNAPSHOT</p>
+                    <p><strong>Version:</strong> 3.0.1-SNAPSHOT</p>
                 </div>
 
                 
@@ -116,11 +116,12 @@ The triggers name property must be unique across all triggers in the application
                  | | `&#45; Hour, 0&#45;23
                  | `&#45; Minute, 0&#45;59
                  `&#45; Second, 0&#45;59</pre></div><p class="paragraph"/><blockquote class="note">
-* Year is the only optional field and may be omitted, the rest are mandatory
-* Day-of-Week and Month are case insensitive, so "DEC" = "dec" = "Dec"
-<strong class="bold"> Either Day-of-Week or Day-of-Month must be "?", or you will get an error since support by the underlying library is not complete. So you can't specify both fields, nor leave both as the all values wildcard "</strong>"; this is a departure from the unix crontab specification.
-* See the CronTrigger Tutorial for an explanation of all the special characters you may use.
-</blockquote>
+<ul class="star">
+<li>Year is the only optional field and may be omitted, the rest are mandatory</li>
+<li>Day-of-Week and Month are case insensitive, so "DEC" = "dec" = "Dec"</li>
+<li>Either Day-of-Week or Day-of-Month must be "?", or you will get an error since support by the underlying library is not complete. So you can't specify both fields, nor leave both as the all values wildcard "*"; this is a departure from the unix crontab specification.</li>
+<li>See the CronTrigger Tutorial for an explanation of all the special characters you may use.</li>
+</ul><p class="paragraph"/></blockquote>
 
 
 
