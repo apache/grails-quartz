@@ -11,7 +11,7 @@
 
             gtag('config', 'UA-82213539-2');
         </script>
-        <title>quartz 3.0.1-SNAPSHOT</title>
+        <title>quartz 4.0.0-SNAPSHOT</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8" />
         <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8" />
@@ -67,7 +67,7 @@ function addJsClass(el) {
                         <div class="project">
                             <h1>quartz</h1>
                             <p><strong>Authors:</strong> </p>
-                            <p><strong>Version:</strong> 3.0.1-SNAPSHOT</p>
+                            <p><strong>Version:</strong> 4.0.0-SNAPSHOT</p>
                             
                         </div>
 
@@ -124,24 +124,20 @@ The triggers name property must be unique across all triggers in the application
                  | | `&#45; Hour, 0&#45;23
                  | `&#45; Minute, 0&#45;59
                  `&#45; Second, 0&#45;59</pre></div><p class="paragraph"/><blockquote class="note">
-<ul class="star">
-<li>Year is the only optional field and may be omitted, the rest are mandatory</li>
-<li>Day-of-Week and Month are case insensitive, so "DEC" = "dec" = "Dec"</li>
-<li>Either Day-of-Week or Day-of-Month must be "?", or you will get an error since support by the underlying library is not complete. So you can't specify both fields, nor leave both as the all values wildcard "*"; this is a departure from the unix crontab specification.</li>
-<li>See the CronTrigger Tutorial for an explanation of all the special characters you may use.</li>
-</ul><p class="paragraph"/></blockquote>
+* Year is the only optional field and may be omitted, the rest are mandatory
+* Day-of-Week and Month are case insensitive, so "DEC" = "dec" = "Dec"
+<strong class="bold"> Either Day-of-Week or Day-of-Month must be "?", or you will get an error since support by the underlying library is not complete. So you can't specify both fields, nor leave both as the all values wildcard "</strong>"; this is a departure from the unix crontab specification.
+* See the CronTrigger Tutorial for an explanation of all the special characters you may use.
+</blockquote>
 
 
 
 <h1 id="triggers">3 Understanding Triggers</h1>
 
 
-<h4>Scheduling configuration syntax</h4><p class="paragraph"/>Currently plugin supports three types of triggers:
-<ul class="star">
-<li><strong class="bold">simple</strong> — executes once per defined interval (ex. “every 10 seconds”);</li>
-<li><strong class="bold">cron</strong> — executes job with cron expression (ex. “at 8:00am every Monday through Friday”);</li>
-<li><strong class="bold">custom</strong>  — your implementation of Trigger interface.</li>
-</ul><p class="paragraph"/>Multiple triggers per job are allowed.<p class="paragraph"/><div class="code"><pre>class MyJob &#123;
+<h4>Scheduling configuration syntax</h4><p class="paragraph"/>Currently plugin supports three types of triggers:<p class="paragraph"/><strong class="bold"> </strong>simple* — executes once per defined interval (ex. “every 10 seconds”);
+<strong class="bold"> </strong>cron* — executes job with cron expression (ex. “at 8:00am every Monday through Friday”);
+<strong class="bold"> </strong>custom*  — your implementation of Trigger interface.<p class="paragraph"/>Multiple triggers per job are allowed.<p class="paragraph"/><div class="code"><pre>class MyJob &#123;
    <span class="java&#45;keyword">static</span> triggers = &#123;
       simple name:'simpleTrigger', startDelay: 10000, repeatInterval: 30000, repeatCount: 10
       cron   name:'cronTrigger',   startDelay: 10000, cronExpression: '0/6 &#42; 15 &#42; &#42; ?', timeZone: TimeZone.getTimeZone(<span class="java&#45;quote">"GMT&#45;8"</span>) //timeZone is optional
@@ -149,25 +145,18 @@ The triggers name property must be unique across all triggers in the application
    &#125;<p class="paragraph"/>   void execute() &#123;
       println <span class="java&#45;quote">"Job run!"</span>
    &#125;
-&#125;</pre></div><p class="paragraph"/>With this configuration job will be executed 11 times with 30 seconds interval with first run in 10 seconds after scheduler startup (simple trigger), also it’ll be executed each 6 second during 15th hour (15:00:00, 15:00:06, 15:00:12, … — this configured by cron trigger) and also it’ll be executed each time your custom trigger will fire.<p class="paragraph"/>Three kinds of triggers are supported with the following parameters:
-<ul class="star">
-<li><code>simple</code>:</li>
-<ul class="star">
-<li><code>name</code> — the name that identifies the trigger;</li>
-<li><code>startDelay</code> — delay (in milliseconds) between scheduler startup and first job’s execution;</li>
-<li><code>repeatInterval</code> — timeout (in milliseconds) between consecutive job’s executions;</li>
-<li><code>repeatCount</code> — trigger will fire job execution (1 + repeatCount) times and stop after that (specify 0 here to have one-shot job or -1 to repeat job executions indefinitely);</li>
-</ul>
-<li><code>cron</code>:</li>
-<ul class="star">
-<li><code>name</code> — the name that identifies the trigger;</li>
-<li><code>startDelay</code> — delay (in milliseconds) between scheduler startup and first job’s execution;</li>
-<li><code>cronExpression</code> — cron expression</li>
-</ul>
-<li><code>custom</code>:</li>
-<ul class="star">
-<li><code>triggerClass</code> — your class which implements Trigger interface;</li>
-</ul></ul><p class="paragraph"/>any params needed by your trigger.<p class="paragraph"/>It is also possible to adjust properties in a trigger Closure by the Grails configuration since the triggers block is given access to the grailsApplication object.<p class="paragraph"/><h4>Dynamic Jobs Scheduling</h4><p class="paragraph"/>Starting from 0.4.1 version you have the ability to schedule job executions dynamically.<p class="paragraph"/>These methods are available:<p class="paragraph"/><div class="code"><pre>// creates cron trigger;
+&#125;</pre></div><p class="paragraph"/>With this configuration job will be executed 11 times with 30 seconds interval with first run in 10 seconds after scheduler startup (simple trigger), also it’ll be executed each 6 second during 15th hour (15:00:00, 15:00:06, 15:00:12, … — this configured by cron trigger) and also it’ll be executed each time your custom trigger will fire.<p class="paragraph"/>Three kinds of triggers are supported with the following parameters:<p class="paragraph"/>* <code>simple</code>:
+<strong class="bold"></strong> <code>name</code> — the name that identifies the trigger;
+<strong class="bold"></strong> <code>startDelay</code> — delay (in milliseconds) between scheduler startup and first job’s execution;
+<strong class="bold"></strong> <code>repeatInterval</code> — timeout (in milliseconds) between consecutive job’s executions;
+<strong class="bold"></strong> <code>repeatCount</code> — trigger will fire job execution (1 + repeatCount) times and stop after that (specify 0 here to have one-shot job or -1 to repeat job executions indefinitely);
+* <code>cron</code>:
+<strong class="bold"></strong> <code>name</code> — the name that identifies the trigger;
+<strong class="bold"></strong> <code>startDelay</code> — delay (in milliseconds) between scheduler startup and first job’s execution;
+<strong class="bold"></strong> <code>cronExpression</code> — cron expression
+* <code>custom</code>:
+<strong class="bold"></strong> <code>triggerClass</code> — your class which implements Trigger interface;
+any params needed by your trigger.<p class="paragraph"/>It is also possible to adjust properties in a trigger Closure by the Grails configuration since the triggers block is given access to the grailsApplication object.<p class="paragraph"/><h4>Dynamic Jobs Scheduling</h4><p class="paragraph"/>Starting from 0.4.1 version you have the ability to schedule job executions dynamically.<p class="paragraph"/>These methods are available:<p class="paragraph"/><div class="code"><pre>// creates cron trigger;
 MyJob.schedule(<span class="java&#45;object">String</span> cronExpression, Map params?)<p class="paragraph"/>//  creates simple trigger: repeats job repeatCount+1 times with delay of repeatInterval milliseconds;
 MyJob.schedule(<span class="java&#45;object">Long</span> repeatInterval, <span class="java&#45;object">Integer</span> repeatCount?, Map params?) )<p class="paragraph"/>// schedules one job execution to the specific date;
 MyJob.schedule(Date scheduleDate, Map params?)<p class="paragraph"/>//schedules job's execution with a custom trigger;
@@ -188,11 +177,8 @@ class MyJob &#123;
 
 <h4>Configuring the plugin</h4><p class="paragraph"/>The plugin supports configuration settings defined in grails-app/conf/application.yml.<p class="paragraph"/><div class="code"><pre>&#45;&#45;&#45;
 quartz:
-    autoStartup: <span class="java&#45;keyword">true</span></pre></div><p class="paragraph"/>Currently supported options:
-<ul class="star">
-<li><code>autoStartup</code> controls automatic startup of the Quartz scheduler during application bootstrap (default: true )</li>
-<li><code>jdbcStore</code> set to true if you want Quartz to persist jobs in your DB (default: false ), you'll also need to provide quartz.properties file and make sure that required tables exist in your db (see Clustering section below for the sample config and automatic tables creation using Hibernate)</li>
-</ul><p class="paragraph"/><h4>Logging</h4><p class="paragraph"/>A log is auto-injected into your task Job class without having to enable it. To set the logging level, just add something like this to your grails-app/conf/Config.groovy log4j configuration.<p class="paragraph"/><div class="code"><pre>debug 'grails.app.jobs'</pre></div><p class="paragraph"/><h4>Hibernate Sessions and Jobs</h4><p class="paragraph"/>Jobs are configured by default to have Hibernate Session bounded to thread each time job is executed. This is required if you are using Hibernate code which requires open session (such as lazy loading of collections) or working with domain objects with unique persistent constraint (it uses Hibernate Session behind the scene). If you want to override this behavior (rarely useful) you can use 'sessionRequired' property:<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">static</span> sessionRequired = <span class="java&#45;keyword">false</span></pre></div><p class="paragraph"/><h4>Configuring concurrent execution</h4><p class="paragraph"/>By default Jobs are executed in concurrent fashion, so new Job execution can start even if previous execution of the same Job is still running. If you want to override this behavior you can use 'concurrent' property, in this case Quartz's StatefulJob will be used (you can find more info about it here):<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">static</span> concurrent = <span class="java&#45;keyword">false</span></pre></div><p class="paragraph"/><h4>Configuring Job Enabled</h4><p class="paragraph"/>By default all jobs are considered enabled. In some cases it may be desired to temporarily disable a job. This can be done by overriding the jobEnabled property behavior<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">static</span> jobEnabled = <span class="java&#45;keyword">false</span></pre></div><p class="paragraph"/><h4>Configuring description</h4><p class="paragraph"/>Quartz allows for each job to have a short description. This may be configured by adding a description field to your Job. The description can be accessed at runtime using the JobManagerService and inspecting the JobDetail object.<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">static</span> description = <span class="java&#45;quote">"Example Job Description"</span></pre></div><p class="paragraph"/><h4>Clustering</h4><p class="paragraph"/>Quartz plugin doesn't support clustering out-of-the-box now. However, you could use standard Quartz clustering configuration. Take a look at the <a href="http://docs.codehaus.org/download/attachments/78053/clustering_sample.tar.gz?version=1" target="blank">example provided by Burt Beckwith</a>. You'll also need to set jdbcStore configuration option to true .<p class="paragraph"/>There are also two parameters for configuring store/clustering on jobs ( volatility and durability , both are true by default) and one for triggers ( volatility , also true by default). Volatile job and trigger will not persist between Quartz runs, and durable job will live even when there is no triggers referring to it.<p class="paragraph"/>Read Quartz documentation for more information on clustering and job stores as well as volatility and durability.<p class="paragraph"/>Now that the plugin supports Quartz 2.1.x, you can now use current versions of open source Terracotta see https://github.com/rvanderwerf/terracotta-grails-demo for an example app.<p class="paragraph"/><h4>Recovering</h4><p class="paragraph"/>Since 0.4.2 recovering from 'recovery' or 'fail-over' situation is supported with requestsRecovery job-level flag ( false by default).<p class="paragraph"/>If a job "requests recovery", and it is executing during the time of a 'hard shutdown' of the scheduler (i.e. the process it is running within crashes, or the machine is shut off), then it is re-executed when the scheduler is started again. In this case, the JobExecutionContext.isRecovering() method will return true.
+    autoStartup: <span class="java&#45;keyword">true</span></pre></div><p class="paragraph"/>Currently supported options:<p class="paragraph"/>* <code>autoStartup</code> controls automatic startup of the Quartz scheduler during application bootstrap (default: true )
+* <code>jdbcStore</code> set to true if you want Quartz to persist jobs in your DB (default: false ), you'll also need to provide quartz.properties file and make sure that required tables exist in your db (see Clustering section below for the sample config and automatic tables creation using Hibernate)<p class="paragraph"/><h4>Logging</h4><p class="paragraph"/>A log is auto-injected into your task Job class without having to enable it. To set the logging level, just add something like this to your grails-app/conf/Config.groovy log4j configuration.<p class="paragraph"/><div class="code"><pre>debug 'grails.app.jobs'</pre></div><p class="paragraph"/><h4>Hibernate Sessions and Jobs</h4><p class="paragraph"/>Jobs are configured by default to have Hibernate Session bounded to thread each time job is executed. This is required if you are using Hibernate code which requires open session (such as lazy loading of collections) or working with domain objects with unique persistent constraint (it uses Hibernate Session behind the scene). If you want to override this behavior (rarely useful) you can use 'sessionRequired' property:<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">static</span> sessionRequired = <span class="java&#45;keyword">false</span></pre></div><p class="paragraph"/><h4>Configuring concurrent execution</h4><p class="paragraph"/>By default Jobs are executed in concurrent fashion, so new Job execution can start even if previous execution of the same Job is still running. If you want to override this behavior you can use 'concurrent' property, in this case Quartz's StatefulJob will be used (you can find more info about it here):<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">static</span> concurrent = <span class="java&#45;keyword">false</span></pre></div><p class="paragraph"/><h4>Configuring Job Enabled</h4><p class="paragraph"/>By default all jobs are considered enabled. In some cases it may be desired to temporarily disable a job. This can be done by overriding the jobEnabled property behavior<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">static</span> jobEnabled = <span class="java&#45;keyword">false</span></pre></div><p class="paragraph"/><h4>Configuring description</h4><p class="paragraph"/>Quartz allows for each job to have a short description. This may be configured by adding a description field to your Job. The description can be accessed at runtime using the JobManagerService and inspecting the JobDetail object.<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">static</span> description = <span class="java&#45;quote">"Example Job Description"</span></pre></div><p class="paragraph"/><h4>Clustering</h4><p class="paragraph"/>Quartz plugin doesn't support clustering out-of-the-box now. However, you could use standard Quartz clustering configuration. Take a look at the <a href="http://docs.apache.org/download/attachments/78053/clustering_sample.tar.gz?version=1" target="blank">example provided by Burt Beckwith</a>. You'll also need to set jdbcStore configuration option to true .<p class="paragraph"/>There are also two parameters for configuring store/clustering on jobs ( volatility and durability , both are true by default) and one for triggers ( volatility , also true by default). Volatile job and trigger will not persist between Quartz runs, and durable job will live even when there is no triggers referring to it.<p class="paragraph"/>Read Quartz documentation for more information on clustering and job stores as well as volatility and durability.<p class="paragraph"/>Now that the plugin supports Quartz 2.1.x, you can now use current versions of open source Terracotta see https://github.com/rvanderwerf/terracotta-grails-demo for an example app.<p class="paragraph"/><h4>Recovering</h4><p class="paragraph"/>Since 0.4.2 recovering from 'recovery' or 'fail-over' situation is supported with requestsRecovery job-level flag ( false by default).<p class="paragraph"/>If a job "requests recovery", and it is executing during the time of a 'hard shutdown' of the scheduler (i.e. the process it is running within crashes, or the machine is shut off), then it is re-executed when the scheduler is started again. In this case, the JobExecutionContext.isRecovering() method will return true.
 
 
                     </div>

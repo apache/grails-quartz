@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"grails.plugins.quartz"},{"l":"grails.plugins.quartz.listeners"}]
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"grails.plugins.quartz"},{"l":"grails.plugins.quartz.listeners"}];updateSearchResults();

@@ -11,7 +11,7 @@
 
         gtag('config', 'UA-82213539-2');
     </script>
-    <title>3 Understanding Triggers 3.0.1-SNAPSHOT</title>
+    <title>3 Understanding Triggers 4.0.0-SNAPSHOT</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
     <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
@@ -81,7 +81,7 @@ function addJsClass() {
                 <div class="project">
                     <h1>3 Understanding Triggers</h1>
 
-                    <p><strong>Version:</strong> 3.0.1-SNAPSHOT</p>
+                    <p><strong>Version:</strong> 4.0.0-SNAPSHOT</p>
                 </div>
 
                 
@@ -91,12 +91,9 @@ function addJsClass() {
 <h1 id="triggers">3 Understanding Triggers</h1>
 
 
-<h4>Scheduling configuration syntax</h4><p class="paragraph"/>Currently plugin supports three types of triggers:
-<ul class="star">
-<li><strong class="bold">simple</strong> — executes once per defined interval (ex. “every 10 seconds”);</li>
-<li><strong class="bold">cron</strong> — executes job with cron expression (ex. “at 8:00am every Monday through Friday”);</li>
-<li><strong class="bold">custom</strong>  — your implementation of Trigger interface.</li>
-</ul><p class="paragraph"/>Multiple triggers per job are allowed.<p class="paragraph"/><div class="code"><pre>class MyJob &#123;
+<h4>Scheduling configuration syntax</h4><p class="paragraph"/>Currently plugin supports three types of triggers:<p class="paragraph"/><strong class="bold"> </strong>simple* — executes once per defined interval (ex. “every 10 seconds”);
+<strong class="bold"> </strong>cron* — executes job with cron expression (ex. “at 8:00am every Monday through Friday”);
+<strong class="bold"> </strong>custom*  — your implementation of Trigger interface.<p class="paragraph"/>Multiple triggers per job are allowed.<p class="paragraph"/><div class="code"><pre>class MyJob &#123;
    <span class="java&#45;keyword">static</span> triggers = &#123;
       simple name:'simpleTrigger', startDelay: 10000, repeatInterval: 30000, repeatCount: 10
       cron   name:'cronTrigger',   startDelay: 10000, cronExpression: '0/6 &#42; 15 &#42; &#42; ?', timeZone: TimeZone.getTimeZone(<span class="java&#45;quote">"GMT&#45;8"</span>) //timeZone is optional
@@ -104,25 +101,18 @@ function addJsClass() {
    &#125;<p class="paragraph"/>   void execute() &#123;
       println <span class="java&#45;quote">"Job run!"</span>
    &#125;
-&#125;</pre></div><p class="paragraph"/>With this configuration job will be executed 11 times with 30 seconds interval with first run in 10 seconds after scheduler startup (simple trigger), also it’ll be executed each 6 second during 15th hour (15:00:00, 15:00:06, 15:00:12, … — this configured by cron trigger) and also it’ll be executed each time your custom trigger will fire.<p class="paragraph"/>Three kinds of triggers are supported with the following parameters:
-<ul class="star">
-<li><code>simple</code>:</li>
-<ul class="star">
-<li><code>name</code> — the name that identifies the trigger;</li>
-<li><code>startDelay</code> — delay (in milliseconds) between scheduler startup and first job’s execution;</li>
-<li><code>repeatInterval</code> — timeout (in milliseconds) between consecutive job’s executions;</li>
-<li><code>repeatCount</code> — trigger will fire job execution (1 + repeatCount) times and stop after that (specify 0 here to have one-shot job or -1 to repeat job executions indefinitely);</li>
-</ul>
-<li><code>cron</code>:</li>
-<ul class="star">
-<li><code>name</code> — the name that identifies the trigger;</li>
-<li><code>startDelay</code> — delay (in milliseconds) between scheduler startup and first job’s execution;</li>
-<li><code>cronExpression</code> — cron expression</li>
-</ul>
-<li><code>custom</code>:</li>
-<ul class="star">
-<li><code>triggerClass</code> — your class which implements Trigger interface;</li>
-</ul></ul><p class="paragraph"/>any params needed by your trigger.<p class="paragraph"/>It is also possible to adjust properties in a trigger Closure by the Grails configuration since the triggers block is given access to the grailsApplication object.<p class="paragraph"/><h4>Dynamic Jobs Scheduling</h4><p class="paragraph"/>Starting from 0.4.1 version you have the ability to schedule job executions dynamically.<p class="paragraph"/>These methods are available:<p class="paragraph"/><div class="code"><pre>// creates cron trigger;
+&#125;</pre></div><p class="paragraph"/>With this configuration job will be executed 11 times with 30 seconds interval with first run in 10 seconds after scheduler startup (simple trigger), also it’ll be executed each 6 second during 15th hour (15:00:00, 15:00:06, 15:00:12, … — this configured by cron trigger) and also it’ll be executed each time your custom trigger will fire.<p class="paragraph"/>Three kinds of triggers are supported with the following parameters:<p class="paragraph"/>* <code>simple</code>:
+<strong class="bold"></strong> <code>name</code> — the name that identifies the trigger;
+<strong class="bold"></strong> <code>startDelay</code> — delay (in milliseconds) between scheduler startup and first job’s execution;
+<strong class="bold"></strong> <code>repeatInterval</code> — timeout (in milliseconds) between consecutive job’s executions;
+<strong class="bold"></strong> <code>repeatCount</code> — trigger will fire job execution (1 + repeatCount) times and stop after that (specify 0 here to have one-shot job or -1 to repeat job executions indefinitely);
+* <code>cron</code>:
+<strong class="bold"></strong> <code>name</code> — the name that identifies the trigger;
+<strong class="bold"></strong> <code>startDelay</code> — delay (in milliseconds) between scheduler startup and first job’s execution;
+<strong class="bold"></strong> <code>cronExpression</code> — cron expression
+* <code>custom</code>:
+<strong class="bold"></strong> <code>triggerClass</code> — your class which implements Trigger interface;
+any params needed by your trigger.<p class="paragraph"/>It is also possible to adjust properties in a trigger Closure by the Grails configuration since the triggers block is given access to the grailsApplication object.<p class="paragraph"/><h4>Dynamic Jobs Scheduling</h4><p class="paragraph"/>Starting from 0.4.1 version you have the ability to schedule job executions dynamically.<p class="paragraph"/>These methods are available:<p class="paragraph"/><div class="code"><pre>// creates cron trigger;
 MyJob.schedule(<span class="java&#45;object">String</span> cronExpression, Map params?)<p class="paragraph"/>//  creates simple trigger: repeats job repeatCount+1 times with delay of repeatInterval milliseconds;
 MyJob.schedule(<span class="java&#45;object">Long</span> repeatInterval, <span class="java&#45;object">Integer</span> repeatCount?, Map params?) )<p class="paragraph"/>// schedules one job execution to the specific date;
 MyJob.schedule(Date scheduleDate, Map params?)<p class="paragraph"/>//schedules job's execution with a custom trigger;
