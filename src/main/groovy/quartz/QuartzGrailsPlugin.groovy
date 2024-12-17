@@ -92,6 +92,7 @@ Adds Quartz job scheduling features
 
                 if (hasJdbcStore && hasHibernate && purgeTables) {
                     purgeTablesBean(JdbcCleanup) { bean ->
+                        dataSource = ref(properties['org.quartz.jdbcStoreDataSource'] ?: 'dataSource')
                         bean.autowire = 'byName'
                     }
                 }
