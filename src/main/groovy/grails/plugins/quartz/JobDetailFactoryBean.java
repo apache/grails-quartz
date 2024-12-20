@@ -19,7 +19,6 @@ package grails.plugins.quartz;
 import org.quartz.JobDetail;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Required;
 
 import static org.quartz.JobBuilder.newJob;
 
@@ -40,7 +39,7 @@ public class JobDetailFactoryBean implements FactoryBean<JobDetail>, Initializin
     // Returned object
     private JobDetail jobDetail;
 
-    @Required
+
     public void setJobClass(GrailsJobClass jobClass) {
         this.jobClass = jobClass;
     }

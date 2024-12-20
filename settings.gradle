@@ -1,6 +1,6 @@
 plugins {
     id "com.gradle.enterprise" version '3.16.2'
-    id 'com.gradle.common-custom-user-data-gradle-plugin' version '1.13'
+    id 'com.gradle.common-custom-user-data-gradle-plugin' version '2.0.2'
 }
 
 gradleEnterprise {
@@ -17,10 +17,14 @@ gradleEnterprise {
 
 buildCache {
     local { enabled = System.getenv('CI') != 'true' }
-    remote(gradleEnterprise.buildCache) {
-        def isAuthenticated = System.getenv('GRADLE_ENTERPRISE_ACCESS_KEY')
-        push = System.getenv('CI') == 'true' && isAuthenticated
+    remote(HttpBuildCache) {
+        push = System.getenv('CI') == 'true'
         enabled = true
+        url = 'https://ge.grails.org/cache/'
+        credentials {
+            username = System.getenv('GRADLE_ENTERPRISE_BUILD_CACHE_NODE_USER')
+            password = System.getenv('GRADLE_ENTERPRISE_BUILD_CACHE_NODE_KEY')
+        }
     }
 }
 

@@ -31,8 +31,6 @@ import org.quartz.impl.matchers.GroupMatcher
  */
 class JobManagerService {
 
-    boolean transactional = false
-
     Scheduler quartzScheduler
 
     /**

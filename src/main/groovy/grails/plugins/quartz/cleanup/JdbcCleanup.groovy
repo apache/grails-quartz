@@ -1,9 +1,10 @@
 package grails.plugins.quartz.cleanup
 
 import groovy.sql.Sql
-import groovy.util.logging.Slf4j;
+import groovy.util.logging.Slf4j
+import jakarta.annotation.PostConstruct;
 
-import javax.annotation.PostConstruct;
+
 
 /**
  * Contributed by Rocketmiles
@@ -16,7 +17,6 @@ import javax.annotation.PostConstruct;
 public class JdbcCleanup {
 
     def dataSource
-    def grailsApplication
 
     @PostConstruct
     void init() {

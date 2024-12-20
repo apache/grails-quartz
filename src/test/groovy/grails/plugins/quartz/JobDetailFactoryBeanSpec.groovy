@@ -39,7 +39,7 @@ class JobDetailFactoryBeanSpec extends Specification {
             new JobKey(JOB_NAME, JOB_GROUP) == jobDetail.key
             JOB_NAME == jobDetail.getJobDataMap().get(JobDetailFactoryBean.JOB_NAME_PARAMETER)
             jobDetail.durable
-            !jobDetail.concurrentExectionDisallowed
+            !jobDetail.isConcurrentExecutionDisallowed()
             !jobDetail.persistJobDataAfterExecution
             jobDetail.requestsRecovery()
             JOB_DESCRIPTION == jobDetail.description
@@ -64,7 +64,7 @@ class JobDetailFactoryBeanSpec extends Specification {
             new JobKey(JOB_NAME, JOB_GROUP) == jobDetail.key
             JOB_NAME == jobDetail.getJobDataMap().get(JobDetailFactoryBean.JOB_NAME_PARAMETER)
             !jobDetail.durable
-            jobDetail.concurrentExectionDisallowed
+            jobDetail.isConcurrentExecutionDisallowed()
             jobDetail.persistJobDataAfterExecution
             !jobDetail.requestsRecovery()
             jobDetail.description == null

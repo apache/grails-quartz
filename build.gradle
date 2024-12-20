@@ -1,18 +1,30 @@
-plugins {
-    id 'groovy'
-    id 'java-library'
-    id 'io.github.gradle-nexus.publish-plugin'
-    id 'maven-publish'
-    id 'signing'
+import org.grails.gradle.plugin.doc.PublishGuideTask
+
+buildscript {
+    repositories {
+        maven { url "https://repo.grails.org/grails/core" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.grails.grails-doc:org.grails.grails-doc.gradle.plugin:$grailsVersion"
+        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+    }
 }
+
+plugins {
+    id "java-library"
+    id "eclipse"
+    id "idea"
+}
+
 
 version =  projectVersion
 group = 'org.grails.plugins'
-ext.set('grailsVersion', libs.versions.grails.get())
-ext.set('isReleaseVersion', !version.toString().endsWith('-SNAPSHOT'))
-ext.set('isSnapshot', !isReleaseVersion)
 
-apply plugin: 'org.grails.grails-plugin' // Needs to be applied after grailsVersion has been set
+apply plugin: "org.grails.grails-plugin"
+apply plugin: 'org.grails.grails-doc'
+apply plugin: 'org.grails.grails-publish'
+
 
 repositories {
   mavenLocal()
@@ -20,27 +32,77 @@ repositories {
   maven { url = 'https://repo.grails.org/grails/core' }
 }
 
-dependencies {
-
-    api libs.quartz
-
-    implementation libs.grails.bootstrap
-    implementation libs.grails.core
-    implementation libs.groovy.sql
-    implementation libs.spring.beans
-    implementation libs.spring.context
-    implementation libs.spring.context.support
-
-    compileOnly libs.groovy.core // CompileStatic and Slf4j
-    compileOnly libs.javax.annotation.api // Provided
-
-    testImplementation libs.spock.core
-
-    testRuntimeOnly libs.slf4j.nop // Get rid of warning about missing slf4j implementation during test task
+compileJava {
+    options.release = 17
 }
 
-apply from: layout.projectDirectory.file('gradle/java-config.gradle')
-apply from: layout.projectDirectory.file('gradle/grails-plugin-config.gradle')
-apply from: layout.projectDirectory.file('gradle/testing-config.gradle')
-apply from: layout.projectDirectory.file('gradle/documentation-config.gradle')
-apply from: layout.projectDirectory.file('gradle/publishing.gradle')
+repositories {
+    mavenCentral()
+    maven { url "https://repo.grails.org/grails/core" }
+}
+
+dependencies {
+
+    api "org.quartz-scheduler:quartz:$quartzVersion"
+
+    implementation "org.grails:grails-bootstrap"
+    implementation "org.grails:grails-core"
+    implementation "org.apache.groovy:groovy-sql"
+    implementation "org.springframework:spring-beans"
+    implementation "org.springframework:spring-context"
+    implementation "org.springframework:spring-context-support"
+    compileOnly "org.apache.groovy:groovy"
+    compileOnly "jakarta.annotation:jakarta.annotation-api"
+
+    testImplementation "org.spockframework:spock-core"
+
+    testRuntimeOnly "org.slf4j:slf4j-nop:$slf4jVersion" // Get rid of warning about missing slf4j implementation during test task
+}
+
+jar {
+    exclude "application.groovy"
+    exclude "src/test/projects/**"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+configurations.register('groovydocConfiguration')
+configurations.register('guideConfiguration')
+
+dependencies {
+
+    groovydocConfiguration localGroovy(), {
+        because 'groovydoc needs to run with the same version as Gradle'
+    }
+
+    guideConfiguration "org.grails:grails-docs"
+    guideConfiguration "org.apache.groovy:groovy-templates"
+}
+
+tasks.withType(Groovydoc).configureEach {
+    access = GroovydocAccess.PRIVATE
+    processScripts = false
+    includeMainForScripts = false
+    includeAuthor = true
+    classpath = configurations.groovydocConfiguration
+    groovyClasspath = configurations.groovydocConfiguration
+}
+
+tasks.withType(PublishGuideTask).configureEach {
+    classpath = configurations.guideConfiguration
+}
+
+grailsPublish {
+    githubSlug = 'grails/grails-quartz'
+    license {
+        name = 'Apache-2.0'
+    }
+    title = 'Grails Quartz Plugin'
+    desc = 'This plugin allows your Grails application to schedule jobs to be executed using a specified interval or cron expression.'
+    developers = ['burtbeckwith': 'Burt Beckwith', 'jeffscottbrown': 'Jeff Scott Brown', 'graemerocher': 'Graeme Rocher',
+                  'ryanvanderwerf':'Ryan Vanderwerf','sergeynebolsin': 'Sergey Nebolsin', 'puneetbehl': 'Puneet Behl',
+                  'vitaliisamolovskikh':'Vitalii Samolovskikh']
+}
