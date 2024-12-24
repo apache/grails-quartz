@@ -17,7 +17,6 @@ plugins {
     id "idea"
 }
 
-
 version =  projectVersion
 group = 'org.grails.plugins'
 
@@ -25,9 +24,7 @@ apply plugin: "org.grails.grails-plugin"
 apply plugin: 'org.grails.grails-doc'
 apply plugin: 'org.grails.grails-publish'
 
-
 repositories {
-  mavenLocal()
   mavenCentral()
   maven { url = 'https://repo.grails.org/grails/core' }
 }
@@ -36,12 +33,8 @@ compileJava {
     options.release = 17
 }
 
-repositories {
-    mavenCentral()
-    maven { url "https://repo.grails.org/grails/core" }
-}
-
 dependencies {
+    implementation platform("org.grails:grails-bom:$grailsVersion")
 
     api "org.quartz-scheduler:quartz:$quartzVersion"
 
@@ -56,7 +49,7 @@ dependencies {
 
     testImplementation "org.spockframework:spock-core"
 
-    testRuntimeOnly "org.slf4j:slf4j-nop:$slf4jVersion" // Get rid of warning about missing slf4j implementation during test task
+    testRuntimeOnly "org.slf4j:slf4j-nop" // Get rid of warning about missing slf4j implementation during test task
 }
 
 jar {
@@ -67,7 +60,6 @@ jar {
 test {
     useJUnitPlatform()
 }
-
 
 configurations.register('groovydocConfiguration')
 configurations.register('guideConfiguration')
