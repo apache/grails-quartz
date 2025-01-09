@@ -155,10 +155,10 @@ Adds Quartz job scheduling features
      */
     def loadQuartzProperties() {
         Properties quartzProperties = new Properties()
-        if (config.getProperty('quartz')) {
+        if (config.get('quartz')) {
             // Convert to a properties file adding a prefix to each property
             ConfigObject configObject = new ConfigObject()
-            configObject.putAll(config.getProperty('quartz') ?: [:])
+            configObject.putAll(config.get('quartz') ?: [:])
             quartzProperties << configObject.toProperties('org.quartz')
         }
         quartzProperties
