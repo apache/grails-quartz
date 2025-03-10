@@ -6,12 +6,7 @@ on:
   pull_request:
     branches:
       - '[3-9]+.[0-9]+.x'
-env:
-  GIT_USER_NAME: 'grails-build'
-  GIT_USER_EMAIL: 'grails-build@users.noreply.github.com'
-
 jobs:
-
   test_project:
     name: Test Project
     if: github.event_name == 'pull_request'
@@ -37,7 +32,8 @@ jobs:
     name: Build Project and Publish Snapshot release
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: gradle/wrapper-validation-action@v2
@@ -72,12 +68,10 @@ jobs:
         with:
           arguments: docs
 
-      - name: Publish Snapshot Documentation to Github Pages
+      - name: "🚀 Publish to Github Pages"
         if: success()
-        uses: grails/github-pages-deploy-action@grails
+        uses: grails/grails-github-actions/deploy-github-pages@main
         env:
-          BRANCH: gh-pages
-          COMMIT_EMAIL: ${{ env.GIT_USER_EMAIL }}
-          COMMIT_NAME: ${{ env.GIT_USER_NAME }}
-          FOLDER: build/docs/manual
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GRADLE_PUBLISH_RELEASE: 'false'
+          SOURCE_FOLDER: build/docs/manual
