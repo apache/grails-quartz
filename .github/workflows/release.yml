@@ -2,66 +2,60 @@ name: Release
 on:
   release:
     types: [published]
-env:
-  GIT_USER_NAME: 'grails-build'
-  GIT_USER_EMAIL: 'grails-build@users.noreply.github.com'
-
+permissions:
+  contents: write
+  packages: read
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
-      contents: write
+      packages: read  #  pre-release workflow
+      contents: write  #  to create release
+      issues: write  #  to modify milestones
     steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/wrapper-validation-action@v2
-      - uses: actions/setup-java@v4
+      - name: "📥 Checkout repository"
+        uses: actions/checkout@v4
+      - name: "☕️ Setup JDK"
+        uses: actions/setup-java@v4
         with:
-          distribution: 'liberica'
           java-version: 17
-
-      - name: Get the current release version
+          distribution: liberica
+      - name: "🐘 Setup Gradle"
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          develocity-access-key: ${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY }}
+      - name: "📝 Store the current release version"
         id: release_version
         run: echo "release_version=${GITHUB_REF:11}" >> $GITHUB_OUTPUT
-
-      - name: Run pre-release
-        uses: grails/github-actions/pre-release@main
-
-      - name: Generate secring file
+      - name: "⚙️ Run pre-release"
+        uses: apache/grails-github-actions/pre-release@asf
+      - name: "🔐 Generate key file for artifact signing"
         env:
           SECRING_FILE: ${{ secrets.SECRING_FILE }}
         run: echo $SECRING_FILE | base64 -d > ${{ github.workspace }}/secring.gpg
-
-      - name: Publish artifacts to Sonatype
-        id: publish_to_sonatype
-        uses: gradle/actions/setup-gradle@v3
+      - name: "📤 Publish to Sonatype - close and release staging repository"
         env:
-          GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
-          NEXUS_PUBLISH_USERNAME: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
-          NEXUS_PUBLISH_PASSWORD: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
-          NEXUS_PUBLISH_URL: ${{ secrets.NEXUS_PUBLISH_RELEASE_URL }}
-          NEXUS_PUBLISH_STAGING_PROFILE_ID: ${{ secrets.NEXUS_PUBLISH_STAGING_PROFILE_ID }}
+          GITHUB_MAVEN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          GRAILS_PUBLISH_RELEASE: 'true'
+          NEXUS_PUBLISH_USERNAME: ${{ secrets.NEXUS_USER }}
+          NEXUS_PUBLISH_PASSWORD: ${{ secrets.NEXUS_PW }}
+          NEXUS_PUBLISH_URL: ${{ secrets.GRAILS_NEXUS_PUBLISH_RELEASE_URL }}
+          NEXUS_PUBLISH_STAGING_PROFILE_ID: ${{ secrets.NEXUS_PUBLISH_STAGING_PROFILE_ID }} # TODO: What about this secret?
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PASSPHRASE: ${{ secrets.SIGNING_PASSPHRASE }}
-        with:
-          arguments: -U -Psigning.secretKeyRingFile=${{ github.workspace }}/secring.gpg publishToSonatype closeAndReleaseSonatypeStagingRepository
-
-      - name: Generate Documentation
-        if: success()
-        uses: gradle/actions/setup-gradle@v3
-        env:
-          GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
-        with:
-          arguments: docs
-
+        run: >
+          ./gradlew --refresh-dependencies
+          -Psigning.secretKeyRingFile=${{ github.workspace }}/secring.gpg
+          publishToSonatype
+          closeAndReleaseSonatypeStagingRepository
+      - name: "🔨 Build Documentation"
+        run: ./gradlew docs
       - name: "🚀 Publish to Github Pages"
-        if: success()
-        uses: grails/grails-github-actions/deploy-github-pages@main
+        uses: apache/grails-github-actions/deploy-github-pages@asf
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GRADLE_PUBLISH_RELEASE: 'true'
           SOURCE_FOLDER: build/docs/manual
           VERSION: ${{ steps.release_version.outputs.release_version }}
-
-      - name: Run post-release
-        if: steps.publish_to_sonatype.outcome == 'success'
-        uses: grails/github-actions/post-release@main
+      - name: "⚙️ Run post-release"
+        uses: apache/grails-github-actions/post-release@asf

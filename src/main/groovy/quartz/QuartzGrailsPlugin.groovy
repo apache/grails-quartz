@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,39 +31,27 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean
 @Slf4j
 class QuartzGrailsPlugin extends Plugin {
 
-    // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "7.0.0-SNAPSHOT > *"
-
-	def watchedResources = "file:./grails-app/jobs/**/*Job.groovy"
-
-	def title = "Quartz" // Headline display name of the plugin
-	def author = "Jeff Brown"
-    def description = '''\
-Adds Quartz job scheduling features
-'''
+    def grailsVersion = '7.0.0-SNAPSHOT > *'
+	def watchedResources = 'file:./grails-app/jobs/**/*Job.groovy'
+	def title = 'Quartz'
+	def author = 'Jeff Brown'
+    def description = 'Adds Quartz job scheduling features'
     def profiles = ['web']
     List loadAfter = ['hibernate3', 'hibernate4', 'hibernate5', 'services']
-
-    // URL to the plugin's documentation
-    def documentation = 'https://grails.github.io/grails-quartz/latest/'
-
-    // License: one of 'APACHE', 'GPL2', 'GPL3'
-    def license = "APACHE"
-
-    // Location of the plugin's issue tracker.
-    def issueManagement = [ system: 'Github Issues', url: 'https://github.com/grails/grails-quartz/issues' ]
-
+    def documentation = 'https://apache.github.io/grails-quartz/latest/'
+    def license = 'APACHE'
+    def issueManagement = [ system: 'Github Issues', url: 'https://github.com/apache/grails-quartz/issues' ]
 
     // Any additional developers beyond the author specified above.
     def developers = [
-            [ name: "Sergey Nebolsin", email: "nebolsin@gmail.com" ],
-            [ name: "Graeme Rocher", email: "graeme.rocher@gmail.com" ],
-            [ name: "Ryan Vanderwerf", email: "rvanderwerf@gmail.com" ],
-            [ name: "Vitalii Samolovskikh", email: "kefir@perm.ru" ]
+            [name: 'Sergey Nebolsin', email: 'nebolsin@gmail.com'],
+            [name: 'Graeme Rocher', email: 'graeme.rocher@gmail.com'],
+            [name: 'Ryan Vanderwerf', email: 'rvanderwerf@gmail.com'],
+            [name: 'Vitalii Samolovskikh', email: 'kefir@perm.ru']
     ]
 
-    // Online location of the plugin's browseable source code.
-    def scm = [ url: 'https://github.com/grails/grails-quartz' ]
+    // Online location of the plugin's browsable source code.
+    def scm = [url: 'https://github.com/apache/grails-quartz']
 
     Closure doWithSpring() {
 

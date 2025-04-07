@@ -1,0 +1,17 @@
+dependencies {
+    add('testRuntimeOnly', 'org.slf4j:slf4j-nop') // Get rid of warning about missing slf4j implementation during test task
+    add('testRuntimeOnly', 'org.junit.platform:junit-platform-launcher') // Gradle 9+ requires this
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat = 'full'
+        events 'passed', 'skipped', 'failed'//, 'standardOut', 'standardError'
+    }
+}
+
+tasks.matching { it.name ==~ /^boot(Test)?Run$/ }.configureEach {
+    // No application class is available
+    enabled = false
+}
