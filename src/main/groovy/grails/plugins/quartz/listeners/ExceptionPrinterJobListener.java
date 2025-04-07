@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 the original author or authors.
+ * Copyright (c) 2011-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package grails.plugins.quartz.listeners;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.listeners.JobListenerSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JobListener implementation which logs an exceptions occurred during job's execution.
@@ -29,7 +29,8 @@ import org.quartz.listeners.JobListenerSupport;
  * @since 0.2
  */
 public class ExceptionPrinterJobListener extends JobListenerSupport {
-    private static final transient Log LOG = LogFactory.getLog(ExceptionPrinterJobListener.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(ExceptionPrinterJobListener.class);
 
     public static final String NAME = "exceptionPrinterListener";
 
@@ -38,7 +39,8 @@ public class ExceptionPrinterJobListener extends JobListenerSupport {
     }
 
     public void jobWasExecuted(JobExecutionContext context, JobExecutionException exception) {
-        if (exception != null)
+        if (exception != null) {
             LOG.error("Exception occurred in job: " + context.getJobDetail().getDescription(), exception);
+        }
     }
 }

@@ -1,0 +1,19 @@
+plugins {
+    id 'groovy-gradle-plugin'
+}
+
+Properties versions = new Properties()
+file('../gradle.properties').withInputStream {
+    versions.load(it)
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://repo.grails.org/grails/core' }
+    maven { url = 'https://repository.apache.org/content/repositories/snapshots' }
+}
+
+dependencies {
+    implementation platform("org.apache.grails:grails-bom:${versions.get('grailsVersion')}")
+    implementation 'org.apache.grails:grails-gradle-plugins'
+}
