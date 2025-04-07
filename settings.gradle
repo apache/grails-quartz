@@ -28,4 +28,4 @@ buildCache {
     }
 }
 
-rootProject.name = 'quartz'
+rootProject.name = 'grails-quartz'
