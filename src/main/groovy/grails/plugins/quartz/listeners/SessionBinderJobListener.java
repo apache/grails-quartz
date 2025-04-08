@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011 the original author or authors.
+ * Copyright (c) 2011-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,12 @@
 
 package grails.plugins.quartz.listeners;
 
-import grails.core.GrailsApplication;
-
 import grails.persistence.support.PersistenceContextInterceptor;
-import grails.util.Holders;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.listeners.JobListenerSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JobListener implementation which wraps the execution of a Quartz Job in a
@@ -34,7 +31,8 @@ import org.quartz.listeners.JobListenerSupport;
  * @since 0.2
  */
 public class SessionBinderJobListener extends JobListenerSupport {
-    private static final transient Log LOG = LogFactory.getLog(SessionBinderJobListener.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(SessionBinderJobListener.class);
 
     public static final String NAME = "sessionBinderListener";
 

@@ -1,0 +1,17 @@
+apply plugin: 'org.apache.grails.gradle.grails-publish'
+
+grailsPublish {
+    githubSlug = 'apache/grails-quartz'
+    license.name = 'Apache-2.0'
+    title = 'Grails Quartz Plugin'
+    desc = 'This plugin allows your Grails application to schedule jobs to be executed using a specified interval or cron expression.'
+    developers = [
+            burtbeckwith: 'Burt Beckwith',
+            jeffscottbrown: 'Jeff Scott Brown',
+            graemerocher: 'Graeme Rocher',
+            ryanvanderwerf: 'Ryan Vanderwerf',
+            sergeynebolsin: 'Sergey Nebolsin',
+            puneetbehl: 'Puneet Behl',
+            vitaliisamolovskikh: 'Vitalii Samolovskikh'
+    ]
+}

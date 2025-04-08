@@ -1,11 +1,11 @@
 # Grails Quartz Plugin
 
-[![Maven Central](https://img.shields.io/maven-central/v/org.grails.plugins/quartz.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/org.grails.plugins/quartz)
-[![Java CI](https://github.com/grails/grails-quartz/actions/workflows/gradle.yml/badge.svg?event=push)](https://github.com/grails/grails-quartz/actions/workflows/gradle.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/org.apache.grails/grails-quartz.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/org.apache.grails/grails-quartz)
+[![Java CI](https://github.com/apache/grails-quartz/actions/workflows/gradle.yml/badge.svg?event=push)](https://github.com/apache/grails-quartz/actions/workflows/gradle.yml)
 
 ## Documentation
 
-[Latest documentation](https://grails.github.io/grails-quartz/latest/) and [snapshots](https://grails.github.io/grails-quartz/snapshot/) are available.
+[Latest documentation](https://apache.github.io/grails-quartz/latest/) and [snapshots](https://apache.github.io/grails-quartz/snapshot/) are available.
 
 ## Branches
 
@@ -19,7 +19,7 @@
 ## Using
 ### Quick start
 To start using Quartz plugin just simply add
-`implementation 'org.grails.plugins:quartz:{version}'` in your `build.gradle`.
+`implementation 'org.apache.grails:grails-quartz:{version}'` in your `build.gradle`.
 
 >[!NOTE]
 > __2.0.13 for Grails 3.3.*__\
@@ -38,7 +38,7 @@ class MyJob {
     }
 
     void execute() {
-        print "Job run!"
+        println 'Job run!'
     }
 }
 ```
@@ -63,7 +63,7 @@ class MyJob {
     }
 
     void execute() {
-        println "Job run!"
+        println 'Job run!'
     }
 }
 ```
