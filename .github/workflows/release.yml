@@ -5,6 +5,8 @@ on:
 permissions:
   contents: write
   packages: read
+env:
+  DEVELOCITY_ACCESS_KEY: ${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY }}
 jobs:
   release:
     runs-on: ubuntu-24.04
@@ -22,8 +24,6 @@ jobs:
           distribution: liberica
       - name: "🐘 Setup Gradle"
         uses: gradle/actions/setup-gradle@v4
-        with:
-          develocity-access-key: ${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY }}
       - name: "📝 Store the current release version"
         id: release_version
         run: echo "release_version=${GITHUB_REF:11}" >> $GITHUB_OUTPUT
