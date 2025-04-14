@@ -10,7 +10,7 @@ on:
 permissions:
   packages: read
 env:
-  DEVELOCITY_ACCESS_KEY: ${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY }}
+  DEVELOCITY_ACCESS_KEY: ge.grails.org=${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY }}
 jobs:
   test_project:
     name: "Test Project"
