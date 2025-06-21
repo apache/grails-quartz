@@ -17,6 +17,10 @@
  *  under the License.
  */
 
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+
 plugins {
     id 'java-library'
     id 'org.apache.grails.gradle.grails-plugin'
@@ -24,6 +28,17 @@ plugins {
 
 version =  projectVersion
 group = 'org.apache.grails'
+
+def buildInstant = java.util.Optional.ofNullable(System.getenv('SOURCE_DATE_EPOCH'))
+        .filter(s -> !s.isEmpty())
+        .map(Long::parseLong)
+        .map(Instant::ofEpochSecond)
+        .orElseGet(Instant::now) as Instant
+ext {
+    formattedBuildDate = DateTimeFormatter.ISO_INSTANT.format(buildInstant)
+    buildDate = buildInstant.atZone(ZoneOffset.UTC) // for reproducible builds
+    isCiBuild = System.getenv().containsKey('CI')
+}
 
 repositories {
     mavenCentral()
@@ -81,4 +96,5 @@ apply {
     from layout.projectDirectory.file('gradle/publish-config.gradle')
     from layout.projectDirectory.file('gradle/test-config.gradle')
     from layout.projectDirectory.file('gradle/rat-root-config.gradle')
+    from layout.projectDirectory.file('gradle/reproducible-config.gradle')
 }
