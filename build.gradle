@@ -80,4 +80,5 @@ apply {
     from layout.projectDirectory.file('gradle/java-config.gradle')
     from layout.projectDirectory.file('gradle/publish-config.gradle')
     from layout.projectDirectory.file('gradle/test-config.gradle')
+    from layout.projectDirectory.file('gradle/rat-root-config.gradle')
 }
