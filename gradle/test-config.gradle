@@ -7,11 +7,13 @@ tasks.withType(Test).configureEach {
     useJUnitPlatform()
     testLogging {
         exceptionFormat = 'full'
-        events 'passed', 'skipped', 'failed'//, 'standardOut', 'standardError'
+        events('passed', 'skipped', 'failed')
     }
 }
 
-tasks.matching { it.name ==~ /^boot(Test)?Run$/ }.configureEach {
-    // No application class is available
-    enabled = false
+['bootRun', 'bootTestRun'].each { taskName ->
+    tasks.named(taskName) {
+        // Disable bootRun and bootTestRun tasks as no application class is available
+        enabled = false
+    }
 }
