@@ -1,34 +1,56 @@
-import org.grails.gradle.plugin.doc.PublishGuideTask
+import org.asciidoctor.gradle.jvm.AsciidoctorTask
 
-apply plugin: 'org.apache.grails.gradle.grails-docs'
+apply plugin: 'org.asciidoctor.jvm.convert'
 
 configurations.register('groovydocConfiguration')
-configurations.register('guideConfiguration')
 
 dependencies {
-
-    groovydocConfiguration localGroovy(), {
-        because 'groovydoc needs to run with the same version as Gradle'
-    }
-
-    guideConfiguration 'org.apache.grails:grails-docs-core'
-    guideConfiguration 'org.apache.groovy:groovy-ant'
-    guideConfiguration 'org.apache.groovy:groovy-templates'
+    groovydocConfiguration platform("org.apache.grails:grails-bom:$grailsVersion")
+    groovydocConfiguration 'org.apache.groovy:groovy-ant'
+    groovydocConfiguration 'org.apache.groovy:groovy-groovydoc'
 }
 
 tasks.withType(Groovydoc).configureEach {
     access = GroovydocAccess.PROTECTED
     processScripts = false
     includeMainForScripts = false
-    includeAuthor = true
+    includeAuthor = false
     classpath = configurations.groovydocConfiguration
     groovyClasspath = configurations.groovydocConfiguration
 }
 
-tasks.withType(PublishGuideTask).configureEach {
-    classpath = configurations.guideConfiguration
-}
-
-tasks.named('docs') {
+tasks.named('asciidoctor', AsciidoctorTask) {
     group = 'documentation'
+    description = 'Generates the reference documentation'
+    sourceDir = layout.projectDirectory.dir('src/docs')
+    outputDir = layout.buildDirectory.dir('docs/guide').get().asFile
+    baseDirFollowsSourceDir()
+    jvm {
+        jvmArgs(
+                '--add-opens', 'java.base/sun.nio.ch=ALL-UNNAMED',
+                '--add-opens', 'java.base/java.io=ALL-UNNAMED'
+        )
+    }
+    attributes(
+            copyright            : 'Apache License, Version 2.0',
+            docinfo1             : 'true',
+            doctype              : 'book',
+            encoding             : 'utf-8',
+            icons                : 'font',
+            id                   : name + ':' + version,
+            idprefix             : '',
+            idseparator          : '-',
+            lang                 : 'en',
+            linkattrs            : true,
+            numbered             : '',
+            producer             : 'Asciidoctor',
+            revnumber            : version,
+            setanchors           : true,
+            'source-highlighter' : 'prettify',
+            toc                  : 'left',
+            toc2                 : '',
+            toclevels            : '2'
+    )
+    inputs.dir(sourceDir)
+    outputs.dir(outputDir)
 }
