@@ -82,3 +82,23 @@ tasks.named('asciidoctor', AsciidoctorTask) {
     inputs.dir(sourceDir)
     outputs.dir(outputDir)
 }
+
+tasks.register('docs') {
+    group = 'documentation'
+    description = 'Generates both API and Guide documentation'
+    dependsOn('groovydoc', 'asciidoctor')
+    def redirectFile = layout.buildDirectory.file('docs/index.html')
+    outputs.file(redirectFile)
+    doLast {
+        redirectFile.get().asFile.text = """\
+            <html lang="en">
+                <head>
+                    <title>Grails Quartz Plugin Documentation</title>
+                    <meta http-equiv="refresh" content="0; url=guide/index.html" />
+                </head>
+                <body>
+                </body>
+            </html>
+        """.stripIndent(12)
+    }
+}
