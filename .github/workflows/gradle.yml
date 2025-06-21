@@ -45,8 +45,8 @@ jobs:
         run: ./gradlew check --continue
   publish_snapshot:
     name: "Build Project and Publish Snapshot"
-    runs-on: ubuntu-22.04
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.repository_owner == 'apache'
     permissions:
       contents: write
     steps:
@@ -76,4 +76,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GRADLE_PUBLISH_RELEASE: 'false'
-          SOURCE_FOLDER: build/docs/manual
+          SOURCE_FOLDER: build/docs
