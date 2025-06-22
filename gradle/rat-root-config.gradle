@@ -32,7 +32,6 @@ tasks.named('rat', RatTask) {
             '**/build/**', // Gradle generated build directories
             '**/.gitattributes', // git configuration isn't code
             '**/.gradle/**', '**/wrapper/**', 'gradlew*',  // gradle wrapper files excluded from src zip
-            '**/resources/*', // exclude test artifacts
             'out/**', '*.ipr', '**/*.iml', '*.iws', '.idea/**', // Intellij generated files
             '**/.sdkmanrc', // tool selection files aren't code
             '**/.gitignore', // git configuration isn't code
