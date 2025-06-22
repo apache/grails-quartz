@@ -23,6 +23,7 @@ dependencies {
 }
 
 tasks.withType(Test).configureEach {
+    onlyIf { !project.hasProperty('skipTests') }
     useJUnitPlatform()
     testLogging {
         exceptionFormat = 'full'
