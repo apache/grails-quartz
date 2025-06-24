@@ -1,3 +1,19 @@
+<!--
+SPDX-License-Identifier: Apache-2.0
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
 # Grails Quartz Plugin
 
 [![Maven Central](https://img.shields.io/maven-central/v/org.apache.grails/grails-quartz.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/org.apache.grails/grails-quartz)
@@ -95,3 +111,28 @@ You can add the following properties to control persistence or not persistence:
 * `quartz.exposeSchedulerInRepository` - expose Schedule in repository
 * `quartz.scheduler.instanceName` - name of the scheduler to avoid conflicts between apps
 * `quartz.purgeQuartzTablesOnStartup` - when jdbcStore set to `true` and this is `true`, clears out all quartz tables on startup
+
+## Building from Source
+
+To build this project from source, you'll need Gradle installed.\
+First, to bootstrap Gradle Wrapper with the correct version in the project directory, run the following commands:
+```console
+cd gradle-bootstrap
+gradle
+cd -
+```
+
+After bootstrapping Gradle Wrapper, you can build and run the tests with the command:
+```console
+./gradlew build
+```
+
+To run only run the build and skip the tests, run:
+```console
+./gradlew build -PskipTests
+``` 
+
+Then publish the jar files to `mavenLocal` for usage:
+```console
+./gradlew publishToMavenLocal
+```

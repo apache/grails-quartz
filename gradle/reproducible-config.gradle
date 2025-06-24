@@ -17,23 +17,16 @@
  *  under the License.
  */
 
-dependencies {
-    add('testRuntimeOnly', 'org.slf4j:slf4j-nop') // Get rid of warning about missing slf4j implementation during test task
-    add('testRuntimeOnly', 'org.junit.platform:junit-platform-launcher') // Gradle 9+ requires this
-}
-
-tasks.withType(Test).configureEach {
-    onlyIf { !project.hasProperty('skipTests') }
-    useJUnitPlatform()
-    testLogging {
-        exceptionFormat = 'full'
-        events('passed', 'skipped', 'failed')
+// Any jar, zip, or archive should be reproducible
+// No longer needed after https://github.com/gradle/gradle/issues/30871
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false // to prevent timestamp mismatches
+    reproducibleFileOrder = true // to keep the same ordering
+    // to avoid platform specific defaults, set the permissions consistently
+    filePermissions { permissions ->
+        permissions.unix(0644)
     }
-}
-
-['bootRun', 'bootTestRun'].each { taskName ->
-    tasks.named(taskName) {
-        // Disable bootRun and bootTestRun tasks as no application class is available
-        enabled = false
+    dirPermissions { permissions ->
+        permissions.unix(0755)
     }
 }

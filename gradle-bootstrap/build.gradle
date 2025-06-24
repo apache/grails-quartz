@@ -17,23 +17,23 @@
  *  under the License.
  */
 
-dependencies {
-    add('testRuntimeOnly', 'org.slf4j:slf4j-nop') // Get rid of warning about missing slf4j implementation during test task
-    add('testRuntimeOnly', 'org.junit.platform:junit-platform-launcher') // Gradle 9+ requires this
+def props = new Properties()
+layout.projectDirectory.file('../.sdkmanrc').asFile.withInputStream {
+    props.load(it)
 }
 
-tasks.withType(Test).configureEach {
-    onlyIf { !project.hasProperty('skipTests') }
-    useJUnitPlatform()
-    testLogging {
-        exceptionFormat = 'full'
-        events('passed', 'skipped', 'failed')
-    }
+tasks.withType(Wrapper).configureEach {
+    gradleVersion = props.gradle
 }
 
-['bootRun', 'bootTestRun'].each { taskName ->
-    tasks.named(taskName) {
-        // Disable bootRun and bootTestRun tasks as no application class is available
-        enabled = false
+defaultTasks 'bootstrap'
+tasks.register('bootstrap') {
+    dependsOn('wrapper')
+    doLast {
+        ant.move(file: "$projectDir/gradlew", todir: "$projectDir/../")
+        ant.move(file: "$projectDir/gradlew.bat", todir: "$projectDir/../")
+        ant.move(file: "$projectDir/gradle/wrapper", todir: "$projectDir/../gradle")
+        ant.chmod(file: "$projectDir/../gradlew", perm: '755')
+        ant.chmod(file: "$projectDir/../gradlew.bat", perm: '755')
     }
 }

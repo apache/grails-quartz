@@ -16,22 +16,27 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #
-projectVersion=4.0.0-SNAPSHOT
-grailsVersion=7.0.0-M4
-javaVersion=17
+PROJECT_NAME='grails-quartz'
+RELEASE_TAG=$1
+DOWNLOAD_LOCATION="${2:-downloads}"
+DOWNLOAD_LOCATION=$(realpath "${DOWNLOAD_LOCATION}")
 
-asciidoctorGradlePluginVersion=4.0.4
-gradleCryptoChecksumVersion=1.4.0
-quartzVersion=2.5.0
-ratVersion=0.8.1
+if [ -z "${RELEASE_TAG}" ]; then
+  echo "Usage: $0 [release-tag] <optional download location>"
+  exit 1
+fi
 
-# TODO: This is a work around as Spring forces Groovy version 4.0.26
-groovy.version=4.0.27
+VERSION=${RELEASE_TAG#v}
 
-# This prevents the Grails Gradle Plugin from unnecessarily excluding slf4j-simple in the generated POMs
-# https://github.com/apache/grails-gradle-plugin/issues/222
-slf4jPreventExclusion=true
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+CWD=$(pwd)
 
-org.gradle.caching=true
-org.gradle.daemon=true
-org.gradle.parallel=true
+cd "${DOWNLOAD_LOCATION}"
+rm *.zip *.asc *.sha512
+cd "${PROJECT_NAME}"
+find . -mindepth 1 -path ./etc -prune -o -exec rm -rf {} +
+cd etc
+find . -mindepth 1 -path ./bin -prune -o -exec rm -rf {} +
+cd bin
+find . -mindepth 1 -path ./results -prune -o -exec rm -rf {} +
+cd "${CWD}"
