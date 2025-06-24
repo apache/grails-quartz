@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
 <meta name="copyright" content="Apache License, Version 2.0">
-<title>Plugin Configuration</title>
+<title>custom</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -443,121 +443,39 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#configuration">1. Plugin Configuration</a>
-<ul class="sectlevel2">
-<li><a href="#configuring-the-plugin">1.1. Configuring the plugin</a></li>
-</ul>
-</li>
+<ul class="sectlevel3">
+<li><a href="#ref-triggers-custom">1. custom</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="configuration">1. Plugin Configuration</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="configuring-the-plugin">1.1. Configuring the plugin</h3>
+<div class="sect3">
+<h4 id="ref-triggers-custom">1. custom</h4>
+<div class="sect4">
+<h5 id="purpose">Purpose</h5>
 <div class="paragraph">
-<p>The plugin supports configuration settings defined in grails-app/conf/application.yml.</p>
+<p>A custom trigger that executes based on the result of a custom <code>Trigger</code> implementation</p>
 </div>
+</div>
+<div class="sect4">
+<h5 id="examples">Examples</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code data-lang="yml">quartz:
-    autoStartup: true</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Currently supported options:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>autoStartup</code> Controls automatic startup of the Quartz scheduler during application bootstrap (default: true).</p>
-</li>
-<li>
-<p><code>jdbcStore</code> Set to true if you want Quartz to persist jobs in your DB (default: false). You&#8217;ll also need to provide a <code>quartz.properties</code> file and make sure that required tables exist in your db (see the <a href="#_clustering">Clustering</a> section below for the sample config and automatic tables creation using Hibernate).</p>
-</li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="logging">1.1.1. Logging</h4>
-<div class="paragraph">
-<p>A log is auto-injected into your task Job class without having to enable it. To set the logging level, add something like this to your grails-app/conf/Config.groovy log4j configuration.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="groovy">debug 'grails.app.jobs'</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="hibernate-sessions-and-jobs">1.1.2. Hibernate Sessions and Jobs</h4>
-<div class="paragraph">
-<p>Jobs are configured by default to have Hibernate Session bounded to thread each time a job is executed. This is required if you are using Hibernate, which requires open session (such as lazy loading of collections) or working with domain objects with unique persistent constraint (it uses Hibernate Session behind the scene). If you want to override this behavior (rarely useful) you can use <code>sessionRequired</code> property:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="groovy">static sessionRequired = false</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="configuring-concurrent-execution">1.1.3. Configuring concurrent execution</h4>
-<div class="paragraph">
-<p>By default, jobs are executed in concurrent fashion, so new job execution can start even if the previous execution of the same job is still running. If you want to override this behavior, you can use <code>concurrent</code> property. In this case Quartz&#8217;s <code>StatefulJob</code> will be used (you can find more info about it here).</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="groovy">static concurrent = false</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="configuring-job-enabled">1.1.4. Configuring Job Enabled</h4>
-<div class="paragraph">
-<p>By default, all jobs are considered enabled. In some cases it may be desired to temporarily disable a job. This can be done by overriding the <code>jobEnabled</code> property behavior.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="groovy">static jobEnabled = false</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="configuring-description">1.1.5. Configuring description</h4>
-<div class="paragraph">
-<p>Quartz allows for each job to have a short description. This may be configured by adding a description field to your Job. The description can be accessed at runtime using the <code>JobManagerService</code> and inspecting the <code>JobDetail</code> object.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="prettyprint highlight"><code data-lang="groovy">static description = 'Example Job Description'</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_clustering">1.1.6. Clustering</h4>
-<div class="paragraph">
-<p>Quartz plugin doesn&#8217;t support clustering out-of-the-box now. However, you could use a standard Quartz clustering configuration. You&#8217;ll also need to set <code>jdbcStore</code> configuration option to <code>true</code>.</p>
-</div>
-<div class="paragraph">
-<p>There are also two parameters for configuring store/clustering on jobs, volatility and durability (both are true by default) and one for triggers, volatility (also true by default). A volatile job and trigger will not persist between Quartz runs, and a durable job will live even when there are no triggers referring to it.</p>
-</div>
-<div class="paragraph">
-<p>Read Quartz documentation for more information on clustering and job stores as well as volatility and durability.</p>
-</div>
-<div class="paragraph">
-<p>Now that the plugin supports Quartz <code>2.1.x</code>, you can use current versions of open source Terracotta see <a href="https://github.com/rvanderwerf/terracotta-grails-demo" class="bare">https://github.com/rvanderwerf/terracotta-grails-demo</a> for an example app.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="recovering">1.1.7. Recovering</h4>
-<div class="paragraph">
-<p>Since <code>0.4.2</code> recovering from a 'recovery' or 'fail-over' situation is supported with the <code>requestsRecovery</code> job-level flag (false by default).</p>
-</div>
-<div class="paragraph">
-<p>If a job "requests recovery", and it is executing during a 'hard shutdown' of the scheduler, (i.e., the process it is running within crashes, or the machine is shut off), then it is re-executed when the scheduler is started again. In this case, the <code>JobExecutionContext.isRecovering()</code> method will return <code>true</code>.</p>
-</div>
+<pre class="prettyprint highlight"><code data-lang="groovy">class MyJob {
+
+    static triggers = {
+        custom(
+                name: 'customTrigger',
+                triggerClass: MyTriggerClass,
+                myParam: myValue,
+                myAnotherParam: myAnotherValue
+        )
+   }
+
+   void execute() {
+      println 'Job run!'
+   }
+}</code></pre>
 </div>
 </div>
 </div>
