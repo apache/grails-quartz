@@ -63,9 +63,9 @@ The above example will call the `execute()` method every second.
 
 ### Scheduling configuration syntax
 
-Currently, plugin supports three types of [triggers](http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/tutorial-lesson-02.html):
+Currently, the plugin supports three types of [triggers](http://www.quartz-scheduler.org/documentation/quartz-2.3.0/tutorials/tutorial-lesson-02.html):
 * **simple trigger** — executes once per defined interval (ex. "every 10 seconds");
-* **cron trigger** — executes job with cron expression (ex. "at 8:00 am every Monday through Friday");
+* **cron trigger** — executes a job with cron expression (ex. "at 8:00 am every Monday through Friday");
 * **custom trigger** — your implementation of [Trigger](http://www.quartz-scheduler.org/api/2.3.0/org/quartz/Trigger.html) interface.
 
 Multiple triggers per job are allowed.
@@ -95,7 +95,7 @@ Three kinds of triggers are supported with the following parameters. The name fi
 * `cron`:
   * `name` — the name that identifies the trigger;
   * `startDelay` — delay (in milliseconds) between scheduler startup and first job's execution;
-  * `cronExpression` — [cron expression](http://www.quartz-scheduler.org/api/2.2.0/org/quartz/CronExpression.html)
+  * `cronExpression` — [cron expression](http://www.quartz-scheduler.org/api/2.3.0/org/quartz/CronExpression.html)
 * `custom`:
   * `triggerClass`  — your class which implements [CalendarIntervalTriggerImpl](http://www.quartz-scheduler.org/api/2.3.0/org/quartz/impl/triggers/CalendarIntervalTriggerImpl.html) impl;
   * any params needed by your trigger.
@@ -103,7 +103,7 @@ Three kinds of triggers are supported with the following parameters. The name fi
 ### Configuration plugin syntax
 
 You can add the following properties to control persistence or not persistence:
-* `quartz.pluginEnabled` - defaults to `true`, can disable plugin for test cases etc
+* `quartz.pluginEnabled` - defaults to `true`, can disable plugin for test cases etc.
 * `quartz.jdbcStore` - `true` to enable database store, `false` to use RamStore (default: `true`)
 * `quartz.autoStartup` - delays jobs until after bootstrap startup phase (default: `false`)
 * `quartz.jdbcStoreDataSource` - jdbc data source alternate name
