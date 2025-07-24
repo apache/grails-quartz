@@ -75,7 +75,7 @@ afterEvaluate {
             artifactsTask.configure {
                 doLast {
                     Map<String, String> artifacts = [:]
-                    extensions.findByType(PublishingExtension).publications.withType(MavenPublication).configureEach { mavenPublication ->
+                    publishing.publications.withType(MavenPublication).configureEach { mavenPublication ->
                         mavenPublication.artifacts.each { artifact ->
                             if (!artifact.file.exists() || artifact.file.name == 'grails-plugin.xml' || artifact.file.name == 'profile.yml') {
                                 return
@@ -104,6 +104,76 @@ afterEvaluate {
         publishTasks.each { taskName ->
             tasks.named(taskName) {
                 finalizedBy(checksumTask)
+            }
+        }
+
+
+        def aggregatePublishedArtifacts = tasks.register('aggregatePublishedArtifacts')
+
+        tasks.register("aggregateChecksums").configure {
+            group = "publishing"
+            description = "Aggregates all SHA-256 checksums into a single file."
+
+            def outputFileProvider = rootProject.layout.buildDirectory.file("CHECKSUMS.txt")
+            outputs.file(outputFileProvider)
+
+            dependsOn(checksumTask)
+            finalizedBy(aggregatePublishedArtifacts)
+
+            outputs.upToDateWhen { false } // not worth caching
+
+            doLast {
+                def outputFile = outputFileProvider.get().asFile
+                outputFile.withPrintWriter { writer ->
+                    def checksumDir = layout.buildDirectory.dir("checksums").get().asFile
+                    if (checksumDir.exists()) {
+                        checksumDir.listFiles(new FilenameFilter() {
+                            boolean accept(File dir, String name) {
+                                return name.endsWith(".sha512")
+                            }
+                        })?.each { checksumFile ->
+                            def jarName = checksumFile.name - ".sha512"
+                            def checksumLine = checksumFile.text.trim()
+                            def checksum = checksumLine.tokenize()[0]
+                            writer.println("${jarName} ${checksum}")
+                        }
+                    }
+                }
+
+                println "Checksum manifest written to ${outputFile}"
+            }
+        }
+
+        aggregatePublishedArtifacts.configure {
+            group = "publishing"
+            description = "Aggregates all published artifacts into a single file."
+
+            def outputFileProvider = rootProject.layout.buildDirectory.file("PUBLISHED_ARTIFACTS.txt")
+            outputs.file(outputFileProvider)
+
+            outputs.upToDateWhen { false } // not worth caching
+
+            dependsOn(artifactsTask)
+
+            doLast {
+                def outputFile = outputFileProvider.get().asFile
+                outputFile.text = "" // clear previous
+                outputFile.withPrintWriter { writer ->
+                    def publishedArtifactsDir = artifactsDir.get().asFile
+                    if (publishedArtifactsDir.exists()) {
+                        publishedArtifactsDir.listFiles(new FilenameFilter() {
+                            boolean accept(File dir, String name) {
+                                return name.endsWith(".txt")
+                            }
+                        })?.each { checksumFile ->
+                            def artifactName = checksumFile.name - ".txt"
+                            def coordinates = checksumFile.text.trim()
+                            writer.println("${artifactName} ${coordinates}")
+                        }
+                    }
+                }
+
+                println "Published artifacts written to ${outputFile}"
             }
         }
     }
