@@ -6,6 +6,8 @@ github:
           type: Team
         - id: jdaugherty
           type: User
+        - id: matrei
+          type: User
       wait_timer: 0
     release:
       required_reviewers:
@@ -13,11 +15,15 @@ github:
           type: Team
         - id: jdaugherty
           type: User
+        - id: matrei
+          type: User
       wait_timer: 0
     docs:
       required_reviewers:
         - id: grails-committers
           type: Team
         - id: jdaugherty
+          type: User
+        - id: matrei
           type: User
       wait_timer: 0
