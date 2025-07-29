@@ -71,7 +71,7 @@ else
     echo "ERROR: Neither gradlew nor gradle found on \$PATH." >&2
     exit 1
 fi
-${GRADLE_CMD} --no-build-cache
+${GRADLE_CMD}
 echo "✅ Gradle Bootstrapped"
 
 echo "Applying License Audit ..."
