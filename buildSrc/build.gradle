@@ -47,6 +47,7 @@ dependencies {
     implementation platform("org.apache.grails:grails-bom:${versions.get('grailsVersion')}")
     implementation "org.asciidoctor:asciidoctor-gradle-jvm:${versions.get('asciidoctorGradlePluginVersion')}"
     implementation 'org.apache.grails:grails-gradle-plugins'
+    implementation 'org.apache.grails.gradle:grails-publish'
     implementation "org.nosphere.apache.rat:org.nosphere.apache.rat.gradle.plugin:${versions.get('ratVersion')}"
     implementation "org.gradle.crypto.checksum:org.gradle.crypto.checksum.gradle.plugin:${versions.get('gradleCryptoChecksumVersion')}"
 }
