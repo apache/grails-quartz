@@ -112,7 +112,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   source:
     # to ensure we never publish any build artifacts, run the source distribution as a separate build workflow
-    environment: source
     name: "Source Distribution"
     needs: publish
     permissions:
