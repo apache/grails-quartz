@@ -262,7 +262,7 @@ jobs:
               mkdir https://dist.apache.org/repos/dist/dev/incubator/grails \
               -m "Create 'grails' dev folder"
           fi
-      - name: "👀 Ensure grails publish folder exists"
+      - name: "👀 Ensure grails quartz folder exists"
         run: |
           set -e
 
@@ -470,7 +470,7 @@ jobs:
 
           echo "::group::Announcement Email"
           echo "*************************************************"
-          echo "Subject: [ANNOUNCE] Apache Grails (incubating) - Gradle Plugin - Grails Publish ${VERSION}"
+          echo "Subject: [ANNOUNCE] Apache Grails (incubating) Quartz Plugin ${VERSION}"
           echo "*************************************************"
           echo "Body:"
           echo "*************************************************"
