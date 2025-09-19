@@ -24,7 +24,7 @@ under the License.
 
 ===== Purpose
 
-A simple trigger that executes on a set internal.
+A simple trigger that executes on a set interval.
 
 
 ===== Examples
