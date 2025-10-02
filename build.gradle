@@ -57,9 +57,13 @@ repositories {
     }
 }
 
+grails {
+    springDependencyManagement = false
+}
+
 dependencies {
 
-    implementation platform("org.apache.grails:grails-bom:$grailsVersion")
+    compileOnly platform("org.apache.grails:grails-bom:$grailsVersion")
 
     api "org.quartz-scheduler:quartz:$quartzVersion", {
         // api: AdaptableJobFactory, InterruptableJob, JobExecutionContext, JobExecutionException,
@@ -67,22 +71,22 @@ dependencies {
         // runtime: @DisallowConcurrentExecution(runtime), @PersistJobDataAfterExecution(runtime)
     }
 
-    api 'org.springframework:spring-beans', {
+    compileOnly 'org.springframework:spring-beans', {
         // api: BeansException
         // impl: BeanUtils, BeanWrapper, FactoryBean, InitializingBean, PropertyAccessorFactory
     }
-    api 'org.springframework:spring-context', {
+    compileOnly 'org.springframework:spring-context', {
         // api: ApplicationContext
         // impl: ApplicationContextAware
     }
 
-    implementation 'org.apache.groovy:groovy-sql', {
+    compileOnly 'org.apache.groovy:groovy-sql', {
         // impl: Sql
     }
-    implementation 'org.springframework:spring-context-support', {
+    compileOnly 'org.springframework:spring-context-support', {
         // impl: AdaptableJobFactory
     }
-    implementation 'org.springframework:spring-core', {
+    compileOnly 'org.springframework:spring-core', {
         // impl: ReflectionUtils
     }
 
@@ -94,6 +98,8 @@ dependencies {
     compileOnly 'org.slf4j:slf4j-api', {
         // api: Logger, LoggerFactory
     }
+
+    testImplementation platform("org.apache.grails:grails-bom:$grailsVersion")
 
     testImplementation 'org.apache.grails:grails-core', {
         // impl: GrailsClass
