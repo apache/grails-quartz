@@ -63,17 +63,15 @@ grails {
 
 dependencies {
 
-    api "org.quartz-scheduler:quartz:$quartzVersion", {
+    implementation platform("org.apache.grails:grails-bom:$grailsVersion")
+
+    api "org.quartz-scheduler:quartz", {
         // api: AdaptableJobFactory, InterruptableJob, JobExecutionContext, JobExecutionException,
         //      UnableToInterruptJobException, TriggerFiredBundle,
         // runtime: @DisallowConcurrentExecution(runtime), @PersistJobDataAfterExecution(runtime)
     }
 
-    compileOnly platform("org.apache.grails:grails-bom:$grailsVersion")
-
     compileOnly 'org.apache.grails:grails-dependencies-starter-web'
-
-    testImplementation platform("org.apache.grails:grails-bom:$grailsVersion")
 
     testImplementation 'org.apache.grails:grails-dependencies-test'
 }
