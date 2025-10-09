@@ -8,6 +8,10 @@ github:
           type: User
         - id: matrei
           type: User
+        - id: jamesfredley
+          type: User
+        - id: sbglasius
+          type: User
       wait_timer: 0
     docs:
       required_reviewers:
@@ -17,6 +21,10 @@ github:
           type: User
         - id: matrei
           type: User
+        - id: jamesfredley
+          type: User
+        - id: sbglasius
+          type: User
       wait_timer: 0
     close:
       required_reviewers:
@@ -25,5 +33,9 @@ github:
         - id: jdaugherty
           type: User
         - id: matrei
+          type: User
+        - id: jamesfredley
+          type: User
+        - id: sbglasius
           type: User
       wait_timer: 0
