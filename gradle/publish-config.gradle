@@ -26,6 +26,10 @@ grailsPublish {
     license.name = 'Apache-2.0'
     title = 'Grails Quartz Plugin'
     desc = 'This plugin allows your Grails application to schedule jobs to be executed using a specified interval or cron expression.'
+    organization {
+        name = 'Apache Software Foundation'
+        url = 'https://apache.org/'
+    }
     developers = [
             burtbeckwith: 'Burt Beckwith',
             jeffscottbrown: 'Jeff Scott Brown',
