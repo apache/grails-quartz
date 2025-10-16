@@ -73,7 +73,7 @@ jobs:
           NEXUS_PUBLISH_PASSWORD: ${{ secrets.NEXUS_STAGE_DEPLOYER_PW }}
           NEXUS_PUBLISH_URL: ${{ vars.STAGING_URL }}
           NEXUS_PUBLISH_STAGING_PROFILE_ID: ${{ secrets.STAGING_PROFILE_ID }}
-          NEXUS_PUBLISH_DESCRIPTION: '${{ env.REPO_NAME }}:${{ VERSION }}'
+          NEXUS_PUBLISH_DESCRIPTION: '${{ env.REPO_NAME }}:${{ env.VERSION }}'
           SIGNING_KEY: ${{ secrets.GPG_KEY_ID }}
         run: ./gradlew initializeSonatypeStagingRepository
       - name: "📤 Publish to Staging Repository"
@@ -82,7 +82,7 @@ jobs:
           NEXUS_PUBLISH_PASSWORD: ${{ secrets.NEXUS_STAGE_DEPLOYER_PW }}
           NEXUS_PUBLISH_URL: ${{ vars.STAGING_URL }}
           NEXUS_PUBLISH_STAGING_PROFILE_ID: ${{ secrets.STAGING_PROFILE_ID }}
-          NEXUS_PUBLISH_DESCRIPTION: '${{ env.REPO_NAME }}:${{ VERSION }}'
+          NEXUS_PUBLISH_DESCRIPTION: '${{ env.REPO_NAME }}:${{ env.VERSION }}'
           SIGNING_KEY: ${{ secrets.GPG_KEY_ID }}
         run: >
           ./gradlew findSonatypeStagingRepository 
@@ -96,7 +96,7 @@ jobs:
           NEXUS_PUBLISH_PASSWORD: ${{ secrets.NEXUS_STAGE_DEPLOYER_PW }}
           NEXUS_PUBLISH_URL: ${{ vars.STAGING_URL }}
           NEXUS_PUBLISH_STAGING_PROFILE_ID: ${{ secrets.STAGING_PROFILE_ID }}
-          NEXUS_PUBLISH_DESCRIPTION: '${{ env_REPO_NAME }}:${{ VERSION }}'
+          NEXUS_PUBLISH_DESCRIPTION: '${{ env_REPO_NAME }}:${{ env.VERSION }}'
           SIGNING_KEY: ${{ secrets.GPG_KEY_ID }}
         run: >
           ./gradlew findSonatypeStagingRepository 
