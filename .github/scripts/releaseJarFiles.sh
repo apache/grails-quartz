@@ -19,7 +19,7 @@
 #  under the License.
 #
 
-# ./releaseJarFiles.sh <staging repo description> <username> <password>
+# ./releaseJarFiles.sh <staging repo description> <username>
 
 set -euo pipefail
 

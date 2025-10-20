@@ -21,7 +21,12 @@ permissions: {}
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GRAILS_PUBLISH_RELEASE: true
+  JAVA_DISTRIBUTION: liberica
   JAVA_VERSION: 17.0.15 # this must be a specific version for reproducible builds, keep it synced with .sdkmanrc
+  PROJECT_DESC: >
+    The Apache Grails Quartz Plugin brings production-grade scheduling
+    to Apache Grails applications adding support for Grails-style job
+    classes with cron and interval schedules.
   PROJECT_NAME: Apache Grails Quartz Plugin
   REPO_NAME: ${{ github.event.repository.name }}
   REPO_SLUG: ${{ github.repository }}
@@ -49,7 +54,7 @@ jobs:
         run: echo "SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)" >> "$GITHUB_ENV"
       - name: "📅 Ensure source files use common date"
         run: find . -depth \( -type f -o -type d \) -exec touch -d "@${SOURCE_DATE_EPOCH}" {} +
-      - name: '🔐 Set up GPG'
+      - name: "🔐 Set up GPG"
         run: |
           echo "${{ secrets.GRAILS_GPG_KEY }}" | gpg --batch --import
           gpg --list-keys
@@ -58,7 +63,7 @@ jobs:
       - name: "☕️ Setup JDK"
         uses: actions/setup-java@v5
         with:
-          distribution: liberica
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
       - name: "🐘 Setup Gradle"
         uses: gradle/actions/setup-gradle@v5
@@ -169,7 +174,7 @@ jobs:
           "$REPO_NAME" \
           -x "${REPO_NAME}/.git/*" \
           -x "${REPO_NAME}/.github/*"
-      - name: '🔐 Set up GPG'
+      - name: "🔐 Set up GPG"
         run: |
           echo "${{ secrets.GRAILS_GPG_KEY }}" | gpg --batch --import
           gpg --list-keys
@@ -353,7 +358,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           ref: ${{ env.TAG }}
-      - name: "Setup SVN and Tools"
+      - name: "⚙️ Setup SVN and Tools"
         run: sudo apt-get install -y subversion subversion-tools tree gettext-base
       - name: "🗳 MANUAL - Confirm Grails PMC Vote succeeded"
         run: |
@@ -378,24 +383,24 @@ jobs:
           echo ""
           echo "Body:"
           echo "*************************************************"
-          cat .github/vote_templates/vote_succeeded.txt | envsubst
+          cat vote_templates/vote_succeeded.txt | envsubst
           echo "*************************************************"
           echo "::endgroup::"
-      - name: "🚀 Release JAR files - MANUAL"
+      - name: "🚀 MANUAL - Release JAR files"
         run: |
           echo "::group::Manual Jar Promotion"
           echo "Run .github/scripts/releaseJarFiles.sh ${TAG} ${REPO_NAME}:${VERSION} <ASF_USER>"
           echo "::endgroup::"
-      - name: "🚀 Release distribution artifacts - MANUAL"
+      - name: "🚀 MANUAL - Release distribution artifacts"
         run: |
           echo "::group::Manual ASF Artifact Promotion"
           echo "Run .github/scripts/releaseDistributions.sh ${TAG} ${SVN_FOLDER} <ASF_USER>"
           echo "::endgroup::"
-      - name: "✅ Update ASF Reporter - MANUAL"
+      - name: "✅ MANUAL - Update ASF Reporter"
         run: |
           echo "::group::Manual ASF Reporter Update"
           TODAY=$(date +"%Y-%m-%d")
-          echo "Check email from no-reply@reporter.apache.org & update https://reporter.apache.org/addrelease.html?grails to add ${SVN_FOLDER^^}:${VERSION} as complete as of ${TODAY}"
+          echo "Check email from no-reply@reporter.apache.org & update https://reporter.apache.org/addrelease.html?grails to add ${SVN_FOLDER^^}-${VERSION} as complete as of ${TODAY}"
           echo "::endgroup::"
   docs:
     environment: docs
@@ -418,7 +423,7 @@ jobs:
       - name: "☕️ Setup JDK"
         uses: actions/setup-java@v5
         with:
-          distribution: liberica
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
       - name: "🐘 Setup Gradle"
         uses: gradle/actions/setup-gradle@v5
@@ -453,7 +458,7 @@ jobs:
       - name: "☕️ Setup JDK"
         uses: actions/setup-java@v5
         with:
-          distribution: liberica
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
       - name: "🐘 Setup Gradle"
         uses: gradle/actions/setup-gradle@v5
@@ -461,12 +466,12 @@ jobs:
           develocity-access-key: ${{ secrets.GRAILS_DEVELOCITY_ACCESS_KEY }}
       - name: "⚙️ Run post-release"
         uses: apache/grails-github-actions/post-release@asf
-      - name: '🌎 Create Blog Post - MANUAL'
+      - name: '🌎 MANUAL - Create Blog Post'
         run: |
           echo "::group::Blog Post Creation - MANUAL"
           echo "Publish a blog post on https://grails.apache.org/blog/ about the new release [${VERSION}] using the repo https://github.com/apache/grails-static-website"
           echo "::endgroup::"
-      - name: 'Announcement Email'
+      - name: "📧 Send Announcement Email"
         env:
           PREVIOUS_VERSION: 'TODO_PREVIOUS_VERSION'
         run: |
