@@ -405,7 +405,7 @@ jobs:
   docs:
     environment: docs
     name: "VOTE SUCCEEDED - Publish Documentation"
-    needs: [ publish, source, upload ] # TODO Once we have confirmed `release` won't fail, add it as a dependency here
+    needs: [ publish, source, upload, release ]
     runs-on: ubuntu-24.04
     permissions:
       contents: write # required for gradle.properties revert
@@ -440,7 +440,7 @@ jobs:
   close:
     name: "VOTE SUCCEEDED - Close Release"
     environment: release
-    needs: [ publish, source, upload, docs ] # TODO Once we have confirmed `release` won't fail, add it as a dependency here
+    needs: [ publish, source, upload, release, docs ]
     runs-on: ubuntu-24.04
     permissions:
       contents: write # required for gradle.properties revert
@@ -471,9 +471,7 @@ jobs:
           echo "::group::Blog Post Creation - MANUAL"
           echo "Publish a blog post on https://grails.apache.org/blog/ about the new release [${VERSION}] using the repo https://github.com/apache/grails-static-website"
           echo "::endgroup::"
-      - name: "📧 Send Announcement Email"
-        env:
-          PREVIOUS_VERSION: 'TODO_PREVIOUS_VERSION'
+      - name: "📧 MANUAL - Send Announcement Email"
         run: |
           echo "::group::Announcement Email"
           echo ""
