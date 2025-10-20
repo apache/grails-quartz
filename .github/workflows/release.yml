@@ -383,7 +383,7 @@ jobs:
           echo ""
           echo "Body:"
           echo "*************************************************"
-          cat vote_templates/vote_succeeded.txt | envsubst
+          cat .github/vote_templates/vote_succeeded.txt | envsubst
           echo "*************************************************"
           echo "::endgroup::"
       - name: "🚀 MANUAL - Release JAR files"
