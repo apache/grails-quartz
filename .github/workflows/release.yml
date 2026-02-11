@@ -22,7 +22,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   GRAILS_PUBLISH_RELEASE: true
   JAVA_DISTRIBUTION: liberica
-  JAVA_VERSION: 17.0.15 # this must be a specific version for reproducible builds, keep it synced with .sdkmanrc
+  JAVA_VERSION: 17.0.17 # this must be a specific version for reproducible builds, keep it synced with .sdkmanrc
   PROJECT_DESC: >
     The Apache Grails Quartz Plugin brings production-grade scheduling
     to Apache Grails applications adding support for Grails-style job
